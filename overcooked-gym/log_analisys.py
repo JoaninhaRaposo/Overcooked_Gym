@@ -4,6 +4,7 @@ import itertools
 import pickle
 from collections import Counter
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 log = []
@@ -31,7 +32,7 @@ s_mdp = []
 
 for i in LOG_NRS:
     # Concatenate all logfiles from chosen condition
-    log_file = f"/home/anavc/Overcooked_Gym/overcooked-gym/logfiles/logfile_{i}_lvl{LVL}.pickle"
+    log_file = f"logfiles/logfile_{i}_lvl{LVL}.pickle"
     with open(log_file, "rb") as f:
         log = pickle.load(f)
 
@@ -50,7 +51,7 @@ l= list(count_human.items())
 #print: x   y   #times visited || para colocar em https://chart-studio.plotly.com
 for item in l:
    toPrint = str(-item[0][0]) + "\t" + str(item[0][1]) + "\t" + str(item[1])
-   print(toPrint)
+#   print(toPrint)
 
 '''
 plt.scatter(y, x,count_human.item((x,y)))
@@ -60,8 +61,28 @@ plt.title('HUMAN POS ENV')
 #plt.grid()
 plt.show()
 '''
-print(count_occurrences(s_mdp).items())
-print("STATE ENV: ", count_occurrences(s_env))
-print("STATE MDP: ", count_occurrences(s_mdp))
+#print(count_occurrences(s_mdp).items())
+#print("STATE ENV: ", count_occurrences(s_env))
+#print("STATE MDP: ", count_occurrences(s_mdp))
 
+#Transições estados de MDP; ( Retirar quantas vezes são registadas transições dos humanos entre node X e node Y do MDP.)
+#1. s_mdp = todos os state mdp numa só lista
+#2. verificar estado x e x+1 - houve transição?
 
+#trans_0_1 = 0 #Transição do no 0 para no 1    
+#trans_0_5 = 0 #transicao do no 0 para o no 5
+#trans_1_2 = 0 
+#trans_1_3 = 0 
+#trans_2_3 = 0
+#trans_3_4 = 0
+#trans_3_5 = 0
+#trans_5_6 = 0
+#trans_6_7 = 0    
+#Fazer matriz 2x2 (in -> out)
+mdp_transitions = np.zeros((len(s_mdp), len(s_mdp)))
+
+for i in range(1,len(s_mdp)):
+  if s_mdp[i-1][1] != s_mdp[i][1]: #No mdp onde o humano se encontra mudou
+     mdp_transitions[i-1][i] += 1 #Aumentar contador de nó i-1 para i
+
+print(mdp_transitions)  #Esta a 0. TODO: Continuar, fazer debug perceber o que esta mal. Confirmar feedback da duvida
