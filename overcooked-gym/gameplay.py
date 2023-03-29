@@ -23,7 +23,7 @@ X_resize = 900
 Y_resize = 700
 
 def get_font(size): # Returns Press-Start-2P in the desired size
-    return pygame.font.Font('/home/anavc/Overcooked_Gym/overcooked-gym/overcooked_ai_py/data/fonts/PublicPixel-0W5Kv.ttf', size)
+    return pygame.font.Font('overcooked_ai_py/data/fonts/PublicPixel-0W5Kv.ttf', size)
 
 #CONSTANTS
 left_wall = pygame.Rect(0, 47, 60, Y_resize)
@@ -67,7 +67,7 @@ display_surface = pygame.display.set_mode((X, Y), pygame.RESIZABLE)
 pygame.display.set_caption("Menu")
 white = (255, 255, 255)
 GREY = (100,100,100)
-BG = pygame.image.load("/home/anavc/Overcooked_Gym/overcooked-gym/overcooked_ai_py/data/graphics/Background.png")
+BG = pygame.image.load("overcooked_ai_py/data/graphics/Background.png")
 
 def fade_in_text(txt_list, dec):
     for txt in txt_list:
@@ -82,7 +82,7 @@ def fade_in_text(txt_list, dec):
 def valid_id():
     i = 0
     if not user_id == '':
-        i = len(glob.glob1("/home/anavc/Overcooked_Gym/overcooked-gym/logfiles/", "logfile_{}_*".format(user_id)))
+        i = len(glob.glob1("/overcooked-gym/logfiles/", "logfile_{}_*".format(user_id)))
         print(user_id)
     if  i > 0:
         return False
@@ -111,9 +111,9 @@ def main_menu():
         
         MENU_TEXT4 = get_font(30).render("INVALID USER ID", True, "#ff0000")
 
-        PLAY_BUTTON = Button(image=pygame.image.load("/home/anavc/Overcooked_Gym/overcooked-gym/overcooked_ai_py/data/graphics/Play Rect.png"), pos=(455, 400), 
+        PLAY_BUTTON = Button(image=pygame.image.load("overcooked_ai_py/data/graphics/Play Rect.png"), pos=(455, 400), 
                             text_input="TUTORIAL", font=get_font(35), base_color="#d7fcd4", hovering_color="White")
-        QUIT_BUTTON = Button(image=pygame.image.load("/home/anavc/Overcooked_Gym/overcooked-gym/overcooked_ai_py/data/graphics/Quit Rect.png"), pos=(455, 550), 
+        QUIT_BUTTON = Button(image=pygame.image.load("overcooked_ai_py/data/graphics/Quit Rect.png"), pos=(455, 550), 
                             text_input="QUIT", font=get_font(35), base_color="#d7fcd4", hovering_color="White")
 
         display_surface.blit(MENU_TEXT, MENU_RECT)
@@ -261,9 +261,9 @@ def mid_screen0_1():
         MENU_TEXT = get_font(40).render("READY FOR LEVEL 1?", True, "#b68f40")
         MENU_RECT = MENU_TEXT.get_rect(center=(455, 220))
 
-        PLAY_BUTTON = Button(image=pygame.image.load("/home/anavc/Overcooked_Gym/overcooked-gym/overcooked_ai_py/data/graphics/Quit Rect.png"), pos=(455, 350), 
+        PLAY_BUTTON = Button(image=pygame.image.load("/overcooked_ai_py/data/graphics/Quit Rect.png"), pos=(455, 350), 
                             text_input="LEVEL 1", font=get_font(35), base_color="#d7fcd4", hovering_color="White")
-        QUIT_BUTTON = Button(image=pygame.image.load("/home/anavc/Overcooked_Gym/overcooked-gym/overcooked_ai_py/data/graphics/Quit Rect.png"), pos=(455, 500), 
+        QUIT_BUTTON = Button(image=pygame.image.load("/overcooked_ai_py/data/graphics/Quit Rect.png"), pos=(455, 500), 
                             text_input="TUTORIAL", font=get_font(35), base_color="#d7fcd4", hovering_color="White")
 
         display_surface.blit(MENU_TEXT, MENU_RECT)
@@ -384,7 +384,7 @@ def play_lvl1():
 
             pygame.display.update()
 
-    log_file = f"/home/anavc/Overcooked_Gym/overcooked-gym/logfiles/logfile_{user_id}_lvl1.pickle"
+    log_file = f"/logfiles/logfile_{user_id}_lvl1.pickle"
 
     with open(log_file, "wb") as a:
         pickle.dump(log, a)
@@ -418,7 +418,7 @@ def mid_screen1_2(onion_time, game_time, score):
         MENU_TEXT5 = get_font(30).render("IN HAND: {}".format(round(onion_time,1)), True, "#b68f40")
         MENU_RECT5 = MENU_TEXT2.get_rect(center=(455, 350))
 
-        PLAY_BUTTON = Button(image=pygame.image.load("/home/anavc/Overcooked_Gym/overcooked-gym/overcooked_ai_py/data/graphics/Play Rect.png"), pos=(455, 550), 
+        PLAY_BUTTON = Button(image=pygame.image.load("/overcooked_ai_py/data/graphics/Play Rect.png"), pos=(455, 550), 
                             text_input="LEVEL 2", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
         #QUIT_BUTTON = Button(image=pygame.image.load("/home/anavc/Overcooked_Gym/overcooked-gym/overcooked_ai_py/data/graphics/Quit Rect.png"), pos=(455, 650), 
         #                    text_input="LEVEL 1", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
@@ -545,7 +545,7 @@ def play_lvl2():
 
             pygame.display.update()
 
-    log_file = f"/home/anavc/Overcooked_Gym/overcooked-gym/logfiles/logfile_{user_id}_lvl2.pickle"
+    log_file = f"/overcooked-gym/logfiles/logfile_{user_id}_lvl2.pickle"
 
     with open(log_file, "wb") as a:
         pickle.dump(log, a)
@@ -583,7 +583,7 @@ def game_over(onion_time, game_time, score):
         MENU_TEXT6 = get_font(20).render("COMPLETION CODE: {}".format(COMPLETION_CODE), True, "#b68f40")
         MENU_RECT6 = MENU_TEXT2.get_rect(center=(455, 450))
 
-        QUIT_BUTTON = Button(image=pygame.image.load("/home/anavc/Overcooked_Gym/overcooked-gym/overcooked_ai_py/data/graphics/Quit Rect.png"), pos=(455, 570), 
+        QUIT_BUTTON = Button(image=pygame.image.load("/overcooked_ai_py/data/graphics/Quit Rect.png"), pos=(455, 570), 
                             text_input="QUIT", font=get_font(40), base_color="#d7fcd4", hovering_color="White")
 
         display_surface.blit(MENU_TEXT, MENU_RECT)

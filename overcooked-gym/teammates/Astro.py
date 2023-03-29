@@ -174,7 +174,7 @@ class AstroHandcoded(HandcodedTeammate):
     ####################################################################################################################
 
     def cell_facing_agent(self, row, column, direction):
-
+        
         dr, dc = OFFSETS[direction]
         object_row = row + dr
         object_column = column + dc

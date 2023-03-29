@@ -9,9 +9,9 @@ import numpy as np
 
 
 log = []
-LVL=1
-LOG_NRS = range(300,329, 2) # PICK CONDITION: nrs impares - condição 1 | nrs pares - condição 2
-#LOG_NRS = range(301,330, 2) #cond 1
+LVL=2
+#LOG_NRS = range(300,329, 2) # PICK CONDITION: nrs impares - condição 1 | nrs pares - condição 2
+LOG_NRS = range(301,330, 2) #cond 1
 ACTION_SPACE = tuple(range(len(ACTION_MEANINGS_MDP[LVL-1])))
 JOINT_ACTION_SPACE = list(itertools.product(ACTION_SPACE, repeat=2))
 #print("READING FROM: ", log_file)
@@ -90,9 +90,11 @@ print("STATE MDP: ", count_occurrences(s_mdp))"""
 #trans_5_6 = 0
 #trans_6_7 = 0    
 #Fazer matriz 2x2 (in -> out)
-mdp_transitions = np.zeros((8, 8))
+#mdp_transitions = np.zeros((8, 8)) Level 1
+mdp_transitions = np.zeros((9,9)) # Level 2
 save_mdp_transition = []
-states_mdp_ball = np.zeros(8)
+#states_mdp_ball = np.zeros(8) level 1
+states_mdp_ball = np.zeros(9)
 states_env_ball = {}
 plot_env_ball = {}
 
@@ -122,7 +124,6 @@ for i in range(len(s_full_env)):
 
         
 print("Len do states_mdp: {}, len do states env: {}".format(len(s_mdp), len(s_full_env)))
-print(s_env)
 print("mdp counter, env counter: {} {}".format(count_timesteps,counter))        
 print("MDP transitions")
 
@@ -192,14 +193,14 @@ print(lista)
 
 lista_ordenada = sorted(lista, key = lambda x: (x[0], x[1]))
 print(lista_ordenada)
-"""for x in lista_ordenada:
+for x in lista_ordenada:
     if x!=0:
         print(x[0:2])
 
 for x in lista_ordenada:
     if x!=0:
         print(x[2])
-"""
+
 """for state in states_env_ball.keys():
       if state != 0: 
          print("{}".format(states_env_ball[state]))"""
