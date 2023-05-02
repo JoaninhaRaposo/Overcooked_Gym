@@ -12,6 +12,8 @@ log = []
 LVL=2
 #LOG_NRS = range(300,329, 2) # PICK CONDITION: nrs impares - condição 1 | nrs pares - condição 2
 LOG_NRS = range(301,330, 2) #cond 1
+#LOG_NRS = range(300,330, 1) #all participants
+
 ACTION_SPACE = tuple(range(len(ACTION_MEANINGS_MDP[LVL-1])))
 JOINT_ACTION_SPACE = list(itertools.product(ACTION_SPACE, repeat=2))
 #print("READING FROM: ", log_file)
@@ -35,6 +37,7 @@ s_full_env = []
 ball_time = []
 game_time = []
 total_scores = []
+s_env_by_participants = []
 print("Log nrs:")
 for i in LOG_NRS:
     print("{}".format(i))
@@ -43,13 +46,17 @@ for i in LOG_NRS:
     with open(log_file, "rb") as f:
         log = pickle.load(f)
 
+    aux = []
     for logframe in log:
         s_env.append(logframe.state_env[:4])
         s_mdp.append(logframe.state_mdp)
         s_full_env.append(logframe.state_env)
+        aux.append(logframe.state_env)
     
     ball_time.append(logframe.onion_time)
     game_time.append(logframe.game_time)
+    s_env_by_participants.append(aux)
+    
 #x,y - coordenadas dos humanos no mapa (para ficar igual ao mapa: (y,-x))
 x = [-array[0] for array in s_env]
 y = [array[1] for array in s_env]
@@ -97,6 +104,7 @@ save_mdp_transition = []
 states_mdp_ball = np.zeros(9)
 states_env_ball = {}
 plot_env_ball = {}
+states_env_ball_by_human = {}
 
 count_timesteps = 0
 for i in range(1,len(s_mdp)):
@@ -115,14 +123,33 @@ for i in range(len(s_mdp)):
 
 counter = 0
 for i in range(len(s_full_env)):
-    if s_full_env[i][6] == 1:
+    if s_full_env[i][6] == 1:  #If human is holding ball
         counter += 1
         if tuple(s_full_env[i][0:2]) not in states_env_ball.keys():
             states_env_ball[(tuple(s_full_env[i][0:2]))] = 1
         else:
             states_env_ball[(tuple(s_full_env[i][0:2]))] += 1
 
+
+#Counter of timesteps holding ball by participants
+counter_by_participant = np.zeros(len(LOG_NRS)) 
+for i in range(len(s_env_by_participants)):
+    for j in range(len(s_env_by_participants[i])):
+        if s_env_by_participants[i][j][6] == 1:  #If human is holding ball
+            counter_by_participant[i] += 1
+        """if tuple(s_full_env[i][0:2]) not in states_env_ball.keys():
+            states_env_ball[(tuple(s_full_env[i][0:2]))] = 1
+        else:
+            states_env_ball[(tuple(s_full_env[i][0:2]))] += 1
+        """    
         
+#Total timesteps by participant
+count_timesteps = np.zeros(len(LOG_NRS)) 
+for i in range(len(s_env_by_participants)):
+    for j in range(len(s_env_by_participants[i])):
+        count_timesteps[i] += 1
+
+
 print("Len do states_mdp: {}, len do states env: {}".format(len(s_mdp), len(s_full_env)))
 print("mdp counter, env counter: {} {}".format(count_timesteps,counter))        
 print("MDP transitions")
@@ -219,3 +246,39 @@ print("Score")
 for i in range(len(game_time)):
     score = 100 - game_time[i] - round(ball_time[i])
     print(score)
+
+
+#Transições env 13x13
+env_transitions =  {}
+#Transições entre estado do environment
+for participant_states in s_env_by_participants:
+    for i in range(1,len(participant_states)):
+        if participant_states[i-1][2] != participant_states[i][2] or participant_states[i-1][3] != participant_states[i][3]: #coordenada x ou y mudou (humano)
+            #env_transitions[participant_states[i-1][1]][participant_states[i][1]] += 1 #Aumentar contador de nó i-1 para i
+            #str_aux = str(participant_states[i-1][1]) + "->" + str( participant_states[i][1])  
+            #save_mdp_transition.append(str_aux)
+            key = "({},{}) -> ({},{})".format(participant_states[i-1][2],participant_states[i-1][3], participant_states[i][2],participant_states[i][3])
+            if key not in env_transitions:
+                env_transitions[key] = 1
+            else:
+                env_transitions[key] +=1
+
+print("Env transitions")
+new_dict = sorted(env_transitions.items(), key=lambda x:x[1])
+for t in new_dict:
+    #print("{} : {}".format(t, new_dict[t]))
+    print(t)
+    #print(new_dict[t])
+
+#Timesteps a segurar a bola por humano
+print("Level {}".format(LVL))
+print("User nr")
+for i in LOG_NRS:
+    print(i)
+
+print("Timesteps by human holding ball")
+for i in counter_by_participant:
+    print(i)
+print("All timesteps by participant")
+for i in count_timesteps:
+    print(i)
