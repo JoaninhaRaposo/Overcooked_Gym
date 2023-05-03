@@ -5,13 +5,17 @@ from yaaf import Timestep
 from yaaf.agents.dqn import MLPDQNAgent
 
 from make_video import make_video
-from overcooked import Overcooked, SingleAgentWrapper
+#from overcooked import Overcooked, SingleAgentWrapper
+from overcooked2 import Overcooked, SingleAgentWrapper
+
+import numpy as np
+
 
 
 def train(agent, teammate, timesteps):
     agent.train()
     teammate.train()
-    env = Overcooked()
+    env = Overcooked(layout = "Lab1")
     env = SingleAgentWrapper(env, teammate)
     state = env.reset()
     for t in range(timesteps):
@@ -25,7 +29,7 @@ def evaluate(agent, teammate, episodes, evaluation_directory):
 
     agent.eval()
     teammate.eval()
-    env = Overcooked()
+    env = Overcooked(layout = "Lab1")
     env = SingleAgentWrapper(env, teammate)
     env = TimeLimit(env, max_episode_steps=1000)
 
@@ -65,7 +69,8 @@ if __name__ == '__main__':
     timestep_evaluation_frequency = 25000
     evaluation_episodes = 3
 
-    env = Overcooked()
+    env = Overcooked(layout = "Lab1")
+
     # Make sure you have the latest yaaf pip install git+https://github.com/jmribeiro/yaaf.git
     agent = MLPDQNAgent(env.num_features, env.num_actions)
     teammate = MLPDQNAgent(env.num_features, env.num_actions)
